@@ -1,13 +1,14 @@
 FROM python:3.11.3-slim
 ENV PYTHONUNBUFFERED True
+ENV PIP_DISABLE_PIP_VERSION_CHECK=on
 
-RUN pip install --upgrade pip
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r  requirements.txt
+RUN pip install poetry
 
-ENV APP_HOME /root
-WORKDIR $APP_HOME
-COPY . $APP_HOME/app
+WORKDIR /app
+COPY . /app
+
+RUN poetry config virtualenvs.create false && \
+    poetry install -v --no-interaction --no-ansi
 
 EXPOSE 8080
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["gunicorn" ,"--bind", ":8080", "src.main:app"]
