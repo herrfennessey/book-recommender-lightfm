@@ -1,27 +1,13 @@
 steps:
   # Step 1: Install Poetry
-  - name: 'python:3.11-slim'
-    entrypoint: sh
-    args:
-      - -c
-      - |
-        pip install poetry
+  - name: python:3.11-slim
+    entrypoint: pip
+    args: [ "install", "-r", "requirements.txt", "--user" ]
 
-  # Step 2: Install dependencies defined in pyproject.toml
-  - name: 'python:3.11-slim'
-    entrypoint: sh
-    args:
-      - -c
-      - |
-        poetry install -v --no-interaction --no-ansi
-
-  # Step 3: Run tests using Poetry
-  - name: 'python:3.11-slim'
-    entrypoint: sh
-    args:
-      - -c
-      - |
-        poetry run pytest
+  # Step 3: Run tests using pytest
+  - name: python:3.11-slim
+    entrypoint: python
+    args: [ "-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml" ]
 
   # Step 4: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
