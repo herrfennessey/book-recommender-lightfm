@@ -18,6 +18,7 @@ steps:
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
       - .
       - '-f'
+      - Dockerfile
 
   # Step 5: Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
