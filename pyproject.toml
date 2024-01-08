@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "book-recommender-lightfm"
+version = "0.1.0"
+description = "A simple FastAPI model server for recommending books using LightFM."
+authors = ["Dave Fennessey <dave@dfennessey.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.108.0"
+uvicorn = {extras = ["standard"], version = "^0.25.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
