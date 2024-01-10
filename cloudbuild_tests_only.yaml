@@ -7,4 +7,4 @@ steps:
       - |
         pip install --upgrade pip
         pip install poetry
-        poetry make test
+        make test
