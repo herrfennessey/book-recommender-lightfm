@@ -1,6 +1,6 @@
 import pytest
 
-from src.main import app
+from src.lightfm.main import app
 
 
 @pytest.fixture

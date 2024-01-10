@@ -1,7 +1,9 @@
 from flask import Flask
 
-
 app = Flask(__name__)
+
+files = {}
+
 
 @app.route('/')
 def hello_world():

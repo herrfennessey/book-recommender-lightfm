@@ -1,10 +1,10 @@
 steps:
-  # Step 1: Install Poetry
+  # Step 1: Run Tests
   - name: python:3.11-slim
-    entrypoint: pip
-    args: [ "install", "-r", "requirements.txt", "--user" ]
-
-  # Step 3: Run tests using pytest
-  - name: python:3.11-slim
-    entrypoint: python
-    args: [ "-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml" ]
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        pip install --upgrade pip
+        pip install poetry
+        poetry run test
