@@ -1,14 +1,24 @@
-FROM python:3.11.3-slim
-ENV PYTHONUNBUFFERED True
-ENV PIP_DISABLE_PIP_VERSION_CHECK=on
+FROM python:3.11-slim-buster AS build
 
-RUN pip install poetry
+ENV POETRY_HOME=/etc/poetry
+
+RUN apt-get update && apt-get install --no-install-recommends -y curl
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+WORKDIR /build
+COPY . .
+
+RUN $POETRY_HOME/venv/bin/poetry install
+RUN $POETRY_HOME/venv/bin/poetry run pytest
+RUN $POETRY_HOME/venv/bin/poetry build
+
+
+FROM python:3.11-slim-buster
+
+COPY --from=build /build/dist/lightfm-0.1.0.tar.gz /app/pkg/
 
 WORKDIR /app
-COPY . /app
 
-RUN poetry config virtualenvs.create false && \
-    poetry install -v --no-interaction --no-ansi
+RUN pip install /app/pkg/lightfm-0.1.0.tar.gz
 
-EXPOSE 8080
-CMD ["gunicorn" ,"--bind", ":8080", "src.main:app"]
+CMD ["gunicorn", "lightfm.main:app", "--bind" , "0.0.0.0:8080", "--workers",  "1"]

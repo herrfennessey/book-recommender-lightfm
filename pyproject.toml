@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "book-recommender-lightfm"
+name = "lightfm"
 version = "0.1.0"
-description = "A simple FastAPI model server for recommending books using LightFM."
+description = "A simple model server for recommending books using LightFM."
 authors = ["Dave Fennessey <dave@dfennessey.com>"]
 readme = "README.md"
 
@@ -9,8 +9,9 @@ readme = "README.md"
 python = "^3.9"
 flask = "^3.0.0"
 gunicorn = "^21.2.0"
-pytest = "^7.4.4"
 
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.4"
 
 [build-system]
 requires = ["poetry-core"]
