@@ -1,0 +1,40 @@
+---
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "dependabot - "
+      include: "scope"
+    # groups patch and minor updates together in one PR
+    groups:
+      minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Docker
+  - package-ecosystem: "docker"
+    # checks /Dockerfile
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "[DISCO-000]"
+      include: "scope"
+    labels:
+      - dependencies
+    # groups patch and minor updates together in one PR
+    groups:
+      minor:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
