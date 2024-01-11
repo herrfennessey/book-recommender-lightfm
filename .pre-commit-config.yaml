@@ -1,0 +1,58 @@
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v3.2.0
+      hooks:
+      -   id: check-byte-order-marker
+      -   id: check-case-conflict
+      -   id: check-json
+      -   id: check-yaml
+          args: ['--allow-multiple-documents']
+      -   id: end-of-file-fixer
+      -   id: trailing-whitespace
+      -   id: mixed-line-ending
+
+    - repo: local
+      hooks:
+      - id: isort
+        name: "Sort imports"
+        language: system
+        types: [file, python]
+        files: .
+        entry: isort
+        args:
+          - "--profile=black"
+          - "--line-length=120"
+          - "--balanced"
+
+    - repo: local
+      hooks:
+        - id: black
+          name: "Format code (black)"
+          language: system
+          entry: black
+          types_or: [python, pyi]
+
+    - repo: https://github.com/pycqa/flake8
+      rev: 5.0.4
+      hooks:
+        - id: flake8
+          name: "Lint code (flake8)"
+          additional_dependencies:
+            - "flake8==5.0.4"
+            - "flake8-eradicate==1.4.0"
+            - "flake8-mutable==1.2.0"
+            - "flake8-pie==0.16.0"
+            - "flake8-quotes==3.3.1"
+            - "flake8-string-format==0.3.0"
+            - "pep8-naming==0.13.2"
+          args:
+            ["--config=.flake8"]
+
+    - repo: local
+      hooks:
+          - id: pytest-check
+            name: "Run pytest tests"
+            entry: pytest
+            language: system
+            pass_filenames: false
+            always_run: true

@@ -1,24 +1,27 @@
-FROM python:3.11-slim-buster AS build
+# We need to compile on 3.11 because lightfm requires GCC
+FROM python:3.11 as builder
+ENV PYTHONUNBUFFERED True
 
-ENV POETRY_HOME=/etc/poetry
+RUN pip install --upgrade pip setuptools wheel
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r  requirements.txt
 
-RUN apt-get update && apt-get install --no-install-recommends -y curl
-RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV APP_HOME /root
+WORKDIR $APP_HOME
+COPY . $APP_HOME/app
 
-WORKDIR /build
-COPY . .
+# Stage 2: Runtime stage with a smaller base image
+FROM python:3.11-slim
 
-RUN $POETRY_HOME/venv/bin/poetry install
-RUN $POETRY_HOME/venv/bin/poetry run pytest
-RUN $POETRY_HOME/venv/bin/poetry build
+# Copy only the built artifacts from the builder stage
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /root/app /app
 
+# Set up environment variables
+ENV PYTHONUNBUFFERED True
+ENV APP_HOME /app
+WORKDIR $APP_HOME
 
-FROM python:3.11-slim-buster
-
-COPY --from=build /build/dist/lightfm-0.1.0.tar.gz /app/pkg/
-
-WORKDIR /app
-
-RUN pip install /app/pkg/lightfm-0.1.0.tar.gz
-
-CMD ["gunicorn", "lightfm.main:app", "--bind" , "0.0.0.0:8080", "--workers",  "1"]
+EXPOSE 8080
+CMD ["gunicorn", "--bind", ":8080", "src.lightapi.main:app"]
