@@ -4,7 +4,7 @@ install:
 
 .PHONY: test
 test:
-	poetry run pytest
+	pytest
 
 .PHONY: build
 build:
@@ -12,18 +12,18 @@ build:
 
 .PHONY: build-image
 build-image:
-	docker build -t lightfm --progress=plain .
+	docker build -t lightapi --progress=plain .
 
 .PHONY: run-gunicorn
 run-gunicorn:
-	poetry run gunicorn lightfm.main:app --bind 0.0.0.0:8080 --workers 1
+	gunicorn src.lightapi.main:app --bind 0.0.0.0:8080 --workers 1
 
 
 .PHONY: run-flask
 run-flask:
-	poetry run flask --app lightfm/main:app run --host=0.0.0.0 --port=8080 --debug
+	flask --app src/lightapi/main:app run --host=0.0.0.0 --port=8080 --debug
 
 
 .PHONY: run-docker
 run-docker:
-	docker run -p 8080:8080 lightfm:latest
+	docker run -p 8080:8080 lightapi:latest
