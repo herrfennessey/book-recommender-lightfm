@@ -1,5 +1,5 @@
 # We need to compile on 3.11 because lightfm requires GCC
-FROM python:3.11 as builder
+FROM python:3.12 as builder
 ENV PYTHONUNBUFFERED True
 
 RUN pip install --upgrade pip setuptools wheel
@@ -11,7 +11,7 @@ WORKDIR $APP_HOME
 COPY . $APP_HOME/app
 
 # Stage 2: Runtime stage with a smaller base image
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Copy only the built artifacts from the builder stage
 COPY --from=builder /usr/local/bin /usr/local/bin
