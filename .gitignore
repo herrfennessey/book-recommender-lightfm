@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 /book-*.json
+/model/books/*.pkl
+/model/profile/*.pkl

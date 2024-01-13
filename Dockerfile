@@ -8,10 +8,16 @@ RUN pip install --no-cache-dir -r  requirements.txt
 
 ENV APP_HOME /root
 WORKDIR $APP_HOME
-COPY . $APP_HOME/app
+COPY ./src $APP_HOME/app/src
+COPY ./model $APP_HOME/app/model
 
 # Stage 2: Runtime stage with a smaller base image
 FROM python:3.11-slim
+
+# Update package list and install libgomp1 (required by lightfm)
+RUN apt-get update && \
+    apt-get install -y libgomp1 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy only the built artifacts from the builder stage
 COPY --from=builder /usr/local/bin /usr/local/bin
@@ -24,4 +30,4 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 
 EXPOSE 8080
-CMD ["gunicorn", "--bind", ":8080", "src.lightapi.main:app"]
+CMD ["gunicorn", "--bind", ":8080", "src.main:app"]
