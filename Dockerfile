@@ -30,4 +30,4 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 
 EXPOSE 8080
-CMD ["gunicorn", "--bind", ":8080", "src.main:app"]
+CMD ["gunicorn", "--bind", ":8080", "src.main:create_app()"]

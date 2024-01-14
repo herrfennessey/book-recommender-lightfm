@@ -4,7 +4,7 @@ from os import path
 
 from flask import Flask, current_app, jsonify, make_response, request
 
-from src.config import Config, ProductionConfig
+from src.config import ProductionConfig, TestingConfig
 from src.models.api import ProfileRecommendationsRequest
 from src.models.books_model import BooksModel
 from src.models.profile_model import ProfileModel
@@ -18,9 +18,15 @@ logging.config.fileConfig(log_file_path, disable_existing_loggers=False)
 logger = logging.getLogger(__name__)
 
 
-def create_app(config_object: Config = ProductionConfig):
+def create_app(test: bool = False):
     app = Flask(__name__)
-    app.config.from_object(config_object)
+
+    if test:
+        config = TestingConfig
+    else:
+        config = ProductionConfig
+
+    app.config.from_object(config)
 
     with app.app_context():
         start = datetime.now()
@@ -66,6 +72,3 @@ def create_app(config_object: Config = ProductionConfig):
             return make_response(jsonify({"error": str(e)}), 500)
 
     return app
-
-
-app = create_app(ProductionConfig)
