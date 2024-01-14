@@ -5,7 +5,7 @@ steps:
     args:
       - '-c'
       - |
-        python -m venv /workspace/venv
+        python3 -m venv /workspace/venv
         source /workspace/venv/bin/activate
         pip install -r requirements.txt
         deactivate
