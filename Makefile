@@ -4,16 +4,16 @@ test:
 
 .PHONY: build-image
 build-image:
-	docker build -t lightapi --progress=plain .
+	docker build --build-arg MODEL_VERSION=1705168040 -t lightapi --progress=plain .
 
 .PHONY: run-gunicorn
 run-gunicorn:
-	gunicorn src.main:app --bind 0.0.0.0:8080 --workers 1
+	gunicorn "src.main:create_app()" --bind 0.0.0.0:8080 --workers 1
 
 
 .PHONY: run-flask
 run-flask:
-	flask --app src/main:app run --host=0.0.0.0 --port=8080 --debug
+	flask --app "src/main:create_app()" run --host=0.0.0.0 --port=8080 --debug
 
 
 .PHONY: run-docker

@@ -9,7 +9,14 @@ RUN pip install --no-cache-dir -r  requirements.txt
 ENV APP_HOME /root
 WORKDIR $APP_HOME
 COPY ./src $APP_HOME/app/src
-COPY ./model $APP_HOME/app/model
+
+ARG MODEL_VERSION
+COPY ./${MODEL_VERSION}/books.pkl $APP_HOME/app/model/books/books.pkl
+COPY ./${MODEL_VERSION}/dataset.pkl $APP_HOME/app/model/profile/dataset.pkl
+COPY ./${MODEL_VERSION}/model.pkl $APP_HOME/app/model/profile/model.pkl
+COPY ./${MODEL_VERSION}/interactions.pkl $APP_HOME/app/model/profile/interactions.pkl
+COPY ./${MODEL_VERSION}/item_features_matrix.pkl $APP_HOME/app/model/profile/item_features_matrix.pkl
+COPY ./${MODEL_VERSION}/model_info.pkl $APP_HOME/app/model/profile/model_info.pkl
 
 # Stage 2: Runtime stage with a smaller base image
 FROM python:3.11-slim

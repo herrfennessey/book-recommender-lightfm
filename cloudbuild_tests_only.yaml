@@ -9,19 +9,19 @@ steps:
     entrypoint: python
     args: [ "-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml" ]
 
-#  - name: 'gcr.io/cloud-builders/gsutil'
-#    args: [ '-m', 'cp', '-r', 'gs://book-recommender-lightfm-model-data/profile/$_MODEL_VERSION', '.' ]
-#    id: Download model files
-#
-#  - name: gcr.io/cloud-builders/docker
-#    args:
-#      - build
-#      - '--no-cache'
-#      - '--build-arg'
-#      - 'MODEL_FILES=$_MODEL_VERSION'
-#      - '-t'
-#      - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-#      - .
-#      - '-f'
-#      - Dockerfile
-#    id: Build
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: [ '-m', 'cp', '-r', 'gs://book-recommender-lightfm-model-data/profile/$_MODEL_VERSION', '.' ]
+    id: Download model files
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '--no-cache'
+      - '--build-arg'
+      - 'MODEL_VERSION=$_MODEL_VERSION'
+      - '-t'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - .
+      - '-f'
+      - Dockerfile
+    id: Build
