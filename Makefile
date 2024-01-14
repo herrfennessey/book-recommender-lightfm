@@ -8,7 +8,7 @@ build-image:
 
 .PHONY: run-gunicorn
 run-gunicorn:
-	gunicorn "src.main:create_app()" --bind 0.0.0.0:8080 --workers 1
+	gunicorn "src.main:create_app()" --bind 0.0.0.0:8080 --workers 1 --timeout 300 --log-config src/logging.conf
 
 
 .PHONY: run-flask
