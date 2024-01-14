@@ -8,3 +8,26 @@ steps:
   - name: python:3.11
     entrypoint: python
     args: [ "-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml" ]
+
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: [ '-m', 'cp', '-r', 'gs://book-recommender-lightfm-model-data/profile/$_MODEL_VERSION', '.' ]
+    id: Download model files
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '--no-cache'
+      - '--build-arg'
+      - 'MODEL_VERSION=$_MODEL_VERSION'
+      - '-t'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - .
+      - '-f'
+      - Dockerfile
+    id: Build
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _SERVICE_NAME: book-recommender-lightfm
+  _GCR_HOSTNAME: us.gcr.io
+  _MODEL_VERSION: "1705168040"
