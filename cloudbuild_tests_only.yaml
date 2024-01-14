@@ -1,7 +1,7 @@
 steps:
   # Step 1: Install dependencies in a virtual environment
   - name: 'python:3.11'
-    entrypoint: '/bin/sh'
+    entrypoint: '/bash'
     args:
       - '-c'
       - |
@@ -12,7 +12,7 @@ steps:
 
   # Step 2: Run tests using pytest
   - name: 'python:3.11'
-    entrypoint: '/bin/sh'
+    entrypoint: '/bash'
     args:
       - '-c'
       - |
