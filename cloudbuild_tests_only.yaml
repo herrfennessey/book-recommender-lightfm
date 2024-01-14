@@ -1,24 +1,13 @@
 steps:
-  # Step 1: Install dependencies in a virtual environment
-  - name: 'python:3.11'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        python -m venv /workspace/venv
-        source /workspace/venv/bin/activate
-        pip install -r requirements.txt
-        deactivate
+  # Step 1: Install all requirements
+  - name: python:3.11
+    entrypoint: pip
+    args: [ "install", "-r", "requirements.txt", "--user" ]
 
-  # Step 2: Run tests using pytest
-  - name: 'python:3.11'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        source /workspace/venv/bin/activate
-        pytest --junitxml=${SHORT_SHA}_test_log.xml
-        deactivate
+  # Step 3: Run tests using pytest
+  - name: python:3.11
+    entrypoint: python
+    args: [ "-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml" ]
 
 #  - name: 'gcr.io/cloud-builders/gsutil'
 #    args: [ '-m', 'cp', '-r', 'gs://book-recommender-lightfm-model-data/profile/$_MODEL_VERSION', '.' ]
