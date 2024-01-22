@@ -8,6 +8,7 @@ isort==5.13.2
 lightfm==1.17
 numpy==1.26.3
 packaging==23.2
+pandas==2.1.4
 pydantic==2.5.3
 pytest==7.4.4
 requests==2.31.0
