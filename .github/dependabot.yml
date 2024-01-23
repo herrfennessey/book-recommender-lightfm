@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     open-pull-requests-limit: 3
     commit-message:
       prefix: "dependabot - "
@@ -23,7 +23,7 @@ updates:
     # checks /Dockerfile
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     open-pull-requests-limit: 3
     commit-message:
       prefix: "[DISCO-000]"
