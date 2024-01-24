@@ -1,4 +1,3 @@
-import pandas as pd
 import pytest
 
 from src.service.profile_service import get_genre_filtered_items
@@ -7,83 +6,52 @@ from src.service.profile_service import get_genre_filtered_items
 @pytest.mark.parametrize(
     "input_data, genre_list, expected_output",
     [
-        # Test case 1: DataFrame and genre_list with one genre
+        # Test case 1: Single work of genres with one genre in genre_list
         (
-            pd.DataFrame({"genres": [["Fantasy", "Adventure"]]}),
+            {"Fantasy": {"work1"}, "Adventure": {"work1"}},
             ["Fantasy"],
-            pd.DataFrame({"genres": [["Fantasy", "Adventure"]]}),
+            {"work1"},
         ),
-        # Test case 2: DataFrame with multiple books and genre_list with multiple genres
+        # Test case 2: Multiple works and the genre_list has multiple genres
         (
-            pd.DataFrame(
-                {
-                    "genres": [
-                        ["Fantasy", "Adventure"],
-                        ["Fantasy", "Romance"],
-                        ["Adventure", "Romance"],
-                    ]
-                }
-            ),
+            {
+                "Fantasy": {"work1", "work2"},
+                "Adventure": {"work1"},
+                "Romance": {"work2", "work3"},
+            },
             ["Fantasy", "Adventure"],
-            pd.DataFrame({"genres": [["Fantasy", "Adventure"]]}),
+            {"work1"},
         ),
-        # Test case 3: No books match the genre_list
+        # Test case 3: No works match the genre_list
         (
-            pd.DataFrame(
-                {
-                    "genres": [
-                        ["Sci-Fi", "Adventure"],
-                        ["Fantasy", "Romance"],
-                        ["Adventure", "Romance"],
-                    ]
-                }
-            ),
+            {
+                "Sci-Fi": {"work1"},
+                "Adventure": {"work1", "work3"},
+                "Romance": {"work2", "work3"},
+            },
             ["Horror", "Mystery"],
-            pd.DataFrame({"genres": []}, dtype=object).iloc[[]],
+            set(),
         ),
-        # Test case 4: All books match the genre_list because it's empty
+        # Test case 4: Empty genre_list should match nothing
         (
-            pd.DataFrame(
-                {
-                    "genres": [
-                        ["Sci-Fi", "Adventure"],
-                        ["Fantasy", "Romance"],
-                        ["Adventure", "Romance"],
-                    ]
-                }
-            ),
+            {
+                "Sci-Fi": {"work1"},
+                "Adventure": {"work1", "work3"},
+                "Romance": {"work2", "work3"},
+            },
             [],
-            pd.DataFrame(
-                {
-                    "genres": [
-                        ["Sci-Fi", "Adventure"],
-                        ["Fantasy", "Romance"],
-                        ["Adventure", "Romance"],
-                    ]
-                }
-            ),
+            set(),
         ),
-        # Test case 5: Genre list has a subset of genres present in all books
+        # Test case 5: Genre list has a subset of genres present in all works
         (
-            pd.DataFrame(
-                {
-                    "genres": [
-                        ["Sci-Fi", "Adventure", "Action"],
-                        ["Action", "Adventure", "Fantasy"],
-                        ["Adventure", "Action"],
-                    ]
-                }
-            ),
+            {
+                "Sci-Fi": {"work1"},
+                "Adventure": {"work1", "work2", "work3"},
+                "Action": {"work1", "work2", "work3"},
+                "Fantasy": {"work2"},
+            },
             ["Action", "Adventure"],
-            pd.DataFrame(
-                {
-                    "genres": [
-                        ["Sci-Fi", "Adventure", "Action"],
-                        ["Action", "Adventure", "Fantasy"],
-                        ["Adventure", "Action"],
-                    ]
-                }
-            ),
+            {"work1", "work2", "work3"},
         ),
     ],
 )
@@ -92,6 +60,4 @@ def test_get_genre_filtered_items(input_data, genre_list, expected_output):
     result = get_genre_filtered_items(input_data, genre_list)
 
     # Verify the result
-    pd.testing.assert_frame_equal(
-        result.reset_index(drop=True), expected_output.reset_index(drop=True)
-    )
+    assert result == expected_output

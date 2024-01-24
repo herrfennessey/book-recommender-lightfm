@@ -11,7 +11,8 @@ WORKDIR $APP_HOME
 COPY ./src $APP_HOME/app/src
 
 ARG MODEL_VERSION
-COPY ./${MODEL_VERSION}/books.pkl $APP_HOME/app/model/books/books.pkl
+COPY ./${MODEL_VERSION}/genres_inverted_index.pkl $APP_HOME/app/model/books/genres_inverted_index.pkl
+COPY ./${MODEL_VERSION}/books.parquet $APP_HOME/app/model/books/books.parquet
 COPY ./${MODEL_VERSION}/dataset.pkl $APP_HOME/app/model/profile/dataset.pkl
 COPY ./${MODEL_VERSION}/model.pkl $APP_HOME/app/model/profile/model.pkl
 COPY ./${MODEL_VERSION}/interactions.pkl $APP_HOME/app/model/profile/interactions.pkl
