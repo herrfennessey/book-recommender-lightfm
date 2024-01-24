@@ -26,32 +26,33 @@ class ProfileModel(BaseModel):
             start = datetime.datetime.now()
             model = pickle.load(f)
             logger.info(
-                f"Loaded model in {(datetime.datetime.now() - start).microseconds / 1000} milliseconds"
+                f"Loaded model in {round((datetime.datetime.now() - start).total_seconds() * 1000)} milliseconds"
             )
         with open(f"{path}/interactions.pkl", "rb") as f:
             start = datetime.datetime.now()
             interactions = pickle.load(f)
             logger.info(
-                f"Loaded interactions in {(datetime.datetime.now() - start).microseconds / 1000} milliseconds"
+                f"Loaded interactions in {round((datetime.datetime.now() - start).total_seconds() * 1000)} milliseconds"
             )
         with open(f"{path}/item_features_matrix.pkl", "rb") as f:
             start = datetime.datetime.now()
             item_features_matrix = pickle.load(f)
             logger.info(
-                f"Loaded item_features_matrix in {(datetime.datetime.now() - start).microseconds / 1000} milliseconds"
+                f"Loaded item_features_matrix in {round((datetime.datetime.now() - start).total_seconds() * 1000)} "
+                f"milliseconds"
             )
         with open(f"{path}/model_info.pkl", "rb") as f:
             start = datetime.datetime.now()
             info = pickle.load(f)
             logger.info(
-                f"Loaded model_train_date in {(datetime.datetime.now() - start).microseconds / 1000} milliseconds"
+                f"Loaded model info in {round((datetime.datetime.now() - start).total_seconds() * 1000)} milliseconds"
             )
         with open(f"{path}/dataset.pkl", "rb") as f:
             start = datetime.datetime.now()
             dataset = pickle.load(f)
             user_id_map, _, item_id_map, item_feature_map = dataset.mapping()
             logger.info(
-                f"Loaded dataset in {(datetime.datetime.now() - start).microseconds / 1000} milliseconds"
+                f"Loaded dataset in {round((datetime.datetime.now() - start).total_seconds() * 1000)} milliseconds"
             )
         return cls(
             model=model,
