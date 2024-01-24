@@ -38,7 +38,7 @@ def create_app(test: bool = False):
         )
         end = datetime.now()
         logging.info(
-            f"Loaded pickle files in {(end - start).microseconds / 1000} milliseconds"
+            f"Loaded pickle files in {round((end - start).total_seconds() * 1000)} milliseconds"
         )
 
     # Register routes

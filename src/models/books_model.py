@@ -20,13 +20,13 @@ class BooksModel(BaseModel):
             start = datetime.now()
             inverted_index = pickle.load(f)
             logger.info(
-                f"Loaded inverted_index in {(datetime.now() - start).microseconds / 1000} milliseconds"
+                f"Loaded inverted_index in {round((datetime.now() - start).total_seconds() * 1000)} milliseconds"
             )
 
         start = datetime.now()
         book_df = pl.read_parquet(f"{path}/books.parquet")
         logger.info(
-            f"Loaded book_df in {(datetime.now() - start).microseconds / 1000} milliseconds"
+            f"Loaded book_df in {round((datetime.now() - start).total_seconds() * 1000)} milliseconds"
         )
 
         return cls(books=book_df, genre_inverted_index=inverted_index)
