@@ -38,4 +38,4 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 
 EXPOSE 8080
-CMD ["gunicorn", "--bind", ":8080", "src.main:create_app()", "--log-config", "src/logging.conf", "--workers", "1", "--timeout", "120"]
+CMD ["gunicorn", "--bind", ":8080", "src.main:create_app()", "--log-config", "src/logging.conf", "--workers", "1", "--timeout", "120", "--worker-class", "gthread", "--threads", "4"]

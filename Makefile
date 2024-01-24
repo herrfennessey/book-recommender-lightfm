@@ -4,7 +4,7 @@ test:
 
 .PHONY: build-image
 build-image:
-	docker build --build-arg MODEL_VERSION=1705168040 -t lightapi --progress=plain .
+	docker build --build-arg MODEL_VERSION=1706076279 -t lightapi --progress=plain .
 
 .PHONY: run-gunicorn
 run-gunicorn:
