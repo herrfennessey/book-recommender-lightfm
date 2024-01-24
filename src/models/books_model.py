@@ -1,8 +1,8 @@
 import logging
+import pickle
 from datetime import datetime
 from typing import Dict, Set
 
-import pandas
 import polars as pl
 from pydantic import BaseModel, ConfigDict
 
@@ -18,7 +18,7 @@ class BooksModel(BaseModel):
     def load_from_pickle(cls, path):
         with open(f"{path}/genres_inverted_index.pkl", "rb") as f:
             start = datetime.now()
-            inverted_index = pandas.read_pickle(f)
+            inverted_index = pickle.load(f)
             logger.info(
                 f"Loaded inverted_index in {(datetime.now() - start).microseconds / 1000} milliseconds"
             )
