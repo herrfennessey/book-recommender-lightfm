@@ -6,7 +6,7 @@ import polars as pl
 from flask import current_app
 
 from src.models.books_model import BooksModel
-from src.models.profile_model import ProfileModel
+from src.models.user_to_item_model import UserToItemModel
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ def get_genre_filtered_items(
 
 def get_top_n_recommendations(
     user_id: str,
-    profile_model: ProfileModel,
+    profile_model: UserToItemModel,
     book_model: BooksModel,
     genre_list=None,
     n=10,
@@ -83,21 +83,21 @@ def get_top_n_recommendations(
         (reverse_item_id_map[idx], scores[idx]) for idx in reversed(top_item_indices)
     ]
 
-    # Select top N items not already interacted with
     top_n_items_scores = [
         item_score for item_score in top_items_scores if not np.isinf(item_score[1])
     ][:n]
+
     top_n_item_ids, top_n_scores = zip(*top_n_items_scores)
     return top_n_item_ids, top_n_scores
 
 
-def get_predictions(user_id, genre_list=None, n=10):
-    model = current_app.profile_model
-    book_df = current_app.book_model
+def get_user_to_item_recommendations(user_id, genre_list=None, n=10):
+    model = current_app.user_to_item
+    book_model = current_app.book_model
 
     try:
         top_work_ids, top_scores = get_top_n_recommendations(
-            user_id, model, book_df, genre_list=genre_list, n=n
+            user_id, model, book_model, genre_list=genre_list, n=n
         )
 
         top_work_ids_np = np.array(top_work_ids)
@@ -107,7 +107,7 @@ def get_predictions(user_id, genre_list=None, n=10):
         )
 
         top_items_df = top_items_df.join(
-            book_df.books.select(["work_id", "book_title"]), on="work_id"
+            book_model.books.select(["work_id", "book_title"]), on="work_id"
         )
 
         return top_items_df.to_dicts()

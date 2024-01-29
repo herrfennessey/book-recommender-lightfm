@@ -5,10 +5,15 @@ from os import path
 from flask import Flask, current_app, jsonify, make_response, request
 
 from src.config import ProductionConfig, TestingConfig
-from src.models.api import ProfileRecommendationsRequest
+from src.models.api import (
+    ItemToItemRecommendationsRequest,
+    UserToItemRecommendationsRequest,
+)
 from src.models.books_model import BooksModel
-from src.models.profile_model import ProfileModel
-from src.service.profile_service import get_predictions
+from src.models.item_to_item_model import ItemToItemModel
+from src.models.user_to_item_model import UserToItemModel
+from src.service.item_to_item import get_item_to_item_recommendations
+from src.service.user_to_item import get_user_to_item_recommendations
 
 # setup loggers to display more information
 log_file_path = path.join(path.dirname(path.abspath(__file__)), "logging.conf")
@@ -30,10 +35,13 @@ def create_app(test: bool = False):
 
     with app.app_context():
         start = datetime.now()
-        current_app.profile_model = ProfileModel.load_from_pickle(
-            app.config["PROFILE_MODEL_PATH"]
+        current_app.user_to_item = UserToItemModel.load_from_compressed_files(
+            app.config["USER_TO_ITEM_PATH"]
         )
-        current_app.book_model = BooksModel.load_from_pickle(
+        current_app.item_to_item = ItemToItemModel.load_from_compressed_files(
+            app.config["ITEM_TO_ITEM_PATH"]
+        )
+        current_app.book_model = BooksModel.load_from_compressed_files(
             app.config["BOOKS_MODEL_PATH"]
         )
         end = datetime.now()
@@ -52,19 +60,35 @@ def create_app(test: bool = False):
 
     @app.route("/model-info")
     def model_info():
-        return jsonify(current_app.profile_model.info)
+        return jsonify(current_app.user_to_item.info)
 
-    @app.route("/predict", methods=["POST"])
-    def profile_predict():
+    @app.route("/user-to-item/predict", methods=["POST"])
+    def user_to_item_predict():
         try:
-            req = ProfileRecommendationsRequest.model_validate(request.json)
+            req = UserToItemRecommendationsRequest.model_validate(request.json)
         except Exception as e:
-            return make_response(jsonify(e), 400)
+            return make_response(jsonify({"error": str(e)}), 400)
 
         try:
-            predictions = get_predictions(
+            predictions = get_user_to_item_recommendations(
                 user_id=str(req.user_id),
                 genre_list=req.genres,
+                n=req.limit,
+            )
+            return make_response(jsonify(predictions), 200)
+        except Exception as e:
+            return make_response(jsonify({"error": str(e)}), 500)
+
+    @app.route("/item-to-item/predict", methods=["POST"])
+    def item_to_item_predict():
+        try:
+            req = ItemToItemRecommendationsRequest.model_validate(request.json)
+        except Exception as e:
+            return make_response(jsonify({"error": str(e)}), 400)
+
+        try:
+            predictions = get_item_to_item_recommendations(
+                work_id=str(req.work_id),
                 n=req.limit,
             )
             return make_response(jsonify(predictions), 200)

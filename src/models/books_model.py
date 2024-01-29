@@ -15,7 +15,7 @@ class BooksModel(BaseModel):
     genre_inverted_index: Dict[str, Set[str]]
 
     @classmethod
-    def load_from_pickle(cls, path):
+    def load_from_compressed_files(cls, path):
         with open(f"{path}/genres_inverted_index.pkl", "rb") as f:
             start = datetime.now()
             inverted_index = pickle.load(f)

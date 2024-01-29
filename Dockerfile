@@ -11,13 +11,19 @@ WORKDIR $APP_HOME
 COPY ./src $APP_HOME/app/src
 
 ARG MODEL_VERSION
+# Books Model
 COPY ./${MODEL_VERSION}/genres_inverted_index.pkl $APP_HOME/app/model/books/genres_inverted_index.pkl
 COPY ./${MODEL_VERSION}/books.parquet $APP_HOME/app/model/books/books.parquet
-COPY ./${MODEL_VERSION}/dataset.pkl $APP_HOME/app/model/profile/dataset.pkl
-COPY ./${MODEL_VERSION}/model.pkl $APP_HOME/app/model/profile/model.pkl
-COPY ./${MODEL_VERSION}/interactions.pkl $APP_HOME/app/model/profile/interactions.pkl
-COPY ./${MODEL_VERSION}/item_features_matrix.pkl $APP_HOME/app/model/profile/item_features_matrix.pkl
-COPY ./${MODEL_VERSION}/model_info.pkl $APP_HOME/app/model/profile/model_info.pkl
+
+# Item to Item Model
+COPY ./${MODEL_VERSION}/item_to_item_precomputed.parquet $APP_HOME/app/model/item_to_item/item_to_item_precomputed.parquet
+
+# User to Item Model
+COPY ./${MODEL_VERSION}/dataset.pkl $APP_HOME/app/model/user_to_item/dataset.pkl
+COPY ./${MODEL_VERSION}/model.pkl $APP_HOME/app/model/user_to_item/model.pkl
+COPY ./${MODEL_VERSION}/interactions.pkl $APP_HOME/app/model/user_to_item/interactions.pkl
+COPY ./${MODEL_VERSION}/item_features_matrix.pkl $APP_HOME/app/user_to_item/profile/item_features_matrix.pkl
+COPY ./${MODEL_VERSION}/model_info.pkl $APP_HOME/app/model/user_to_item/model_info.pkl
 
 # Stage 2: Runtime stage with a smaller base image
 FROM python:3.11-slim

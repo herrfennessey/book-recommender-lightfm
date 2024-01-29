@@ -5,7 +5,8 @@ class Config:
     DEBUG = False
     TESTING = False
     BASE_DIR = Path(__file__).resolve().parent.parent
-    PROFILE_MODEL_PATH = BASE_DIR / "model/profile"
+    USER_TO_ITEM_PATH = BASE_DIR / "model/user_to_item"
+    ITEM_TO_ITEM_PATH = BASE_DIR / "model/item_to_item"
     BOOKS_MODEL_PATH = BASE_DIR / "model/books"
 
 
@@ -19,5 +20,6 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    PROFILE_MODEL_PATH = Config.BASE_DIR / "model_test/profile"
+    USER_TO_ITEM_PATH = Config.BASE_DIR / "model_test/profile"
+    ITEM_TO_ITEM_PATH = Config.BASE_DIR / "model_test/item_to_item"
     BOOKS_MODEL_PATH = Config.BASE_DIR / "model_test/books"

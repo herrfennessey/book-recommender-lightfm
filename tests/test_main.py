@@ -21,9 +21,18 @@ def test_model_info_path(client):
     }
 
 
-def test_predict(client):
+def test_user_to_item(client):
     response = client.post(
-        "/predict", json={"user_id": "24697113", "genres": ["Fiction"], "limit": 5}
+        "/user-to-item/predict",
+        json={"user_id": "24697113", "genres": ["Fiction"], "limit": 5},
     )
     assert response.status_code == 200
     assert len(response.json) == 5
+
+
+def test_item_to_item(client):
+    response = client.post(
+        "/item-to-item/predict", json={"work_id": "21580644", "limit": 15}
+    )
+    assert response.status_code == 200
+    assert len(response.json) == 15
