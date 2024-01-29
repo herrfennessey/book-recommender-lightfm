@@ -10,7 +10,7 @@ from scipy.sparse import csr_matrix
 logger = logging.getLogger(__name__)
 
 
-class ProfileModel(BaseModel):
+class UserToItemModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     user_id_map: Dict[str, int]
     item_id_map: Dict[str, int]
@@ -21,7 +21,7 @@ class ProfileModel(BaseModel):
     model: LightFM
 
     @classmethod
-    def load_from_pickle(cls, path):
+    def load_from_compressed_files(cls, path):
         with open(f"{path}/model.pkl", "rb") as f:
             start = datetime.datetime.now()
             model = pickle.load(f)

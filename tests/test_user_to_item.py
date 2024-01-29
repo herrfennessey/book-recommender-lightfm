@@ -1,6 +1,6 @@
 import pytest
 
-from src.service.profile_service import get_genre_filtered_items
+from src.service.user_to_item import get_genre_filtered_items
 
 
 @pytest.mark.parametrize(
