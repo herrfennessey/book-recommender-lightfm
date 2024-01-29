@@ -22,7 +22,7 @@ COPY ./${MODEL_VERSION}/item_to_item_precomputed.parquet $APP_HOME/app/model/ite
 COPY ./${MODEL_VERSION}/dataset.pkl $APP_HOME/app/model/user_to_item/dataset.pkl
 COPY ./${MODEL_VERSION}/model.pkl $APP_HOME/app/model/user_to_item/model.pkl
 COPY ./${MODEL_VERSION}/interactions.pkl $APP_HOME/app/model/user_to_item/interactions.pkl
-COPY ./${MODEL_VERSION}/item_features_matrix.pkl $APP_HOME/app/user_to_item/item_features_matrix.pkl
+COPY ./${MODEL_VERSION}/item_features_matrix.pkl $APP_HOME/app/model/user_to_item/item_features_matrix.pkl
 COPY ./${MODEL_VERSION}/model_info.pkl $APP_HOME/app/model/user_to_item/model_info.pkl
 
 # Stage 2: Runtime stage with a smaller base image
