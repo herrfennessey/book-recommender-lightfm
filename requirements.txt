@@ -2,13 +2,13 @@ black==24.1.1
 click==8.1.7
 coverage==7.4.1
 flake8==7.0.0
-Flask==3.0.1
+Flask==3.0.2
 gunicorn==21.2.0
 isort==5.13.2
 lightfm==1.17
 numpy==1.26.3
 packaging==23.2
-polars==0.20.6
-pydantic==2.5.3
+polars==0.20.7
+pydantic==2.6.0
 pytest==8.0.0
 requests==2.31.0
