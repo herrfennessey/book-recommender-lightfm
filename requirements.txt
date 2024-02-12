@@ -6,9 +6,9 @@ Flask==3.0.2
 gunicorn==21.2.0
 isort==5.13.2
 lightfm==1.17
-numpy==1.26.3
+numpy==1.26.4
 packaging==23.2
 polars==0.20.7
-pydantic==2.6.0
+pydantic==2.6.1
 pytest==8.0.0
 requests==2.31.0
